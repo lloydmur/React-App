@@ -4,26 +4,36 @@ import '../App.css';
 import { Table, Checkbox } from 'semantic-ui-react'
 import { ListItem } from './ListItem.js'
 
+
+/*
 const todos = [
   { title: 'Pet Kitties', completed: false},
-  { title: 'Count Fiddies', completed: false},
+  { title: 'Count FidSdies', completed: false},
   { title: 'Eat Corn', completed: false}
 ]
-
+*/
+const url_todos = 'http://localhost:4000/todos/'
+const headers = {'content-type': 'application/json'}
 
 class TodoApp extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      todos: todos,
+      todos: [],
       newItem: '',
       allSelected: false
     }
   }
-  checboxClickHandler(item, index){
-    let copy = this.state.todos     //copy the todo item list from app.state.todos
-    copy[index].completed = !item.completed     //invert completed
-    this.setState( {todos: copy })             //inject copy back into state
+  //Lifecycle method Runs when this component mounts the DOM
+  componentDidMount(){
+    this.fetchTodos()
+  }
+
+  fetchTodos =  () => {
+    fetch(url_todos)
+      .then((data) => data.json()) //Convert data/response to JSON format
+      .then((todos) => this.setState({todos: todos}))
+      .catch((err) => console.error({err}))
   }
 
   masterCheckboxHandler(){
@@ -35,6 +45,27 @@ class TodoApp extends React.Component {
     })
     this.setState({todos: copy, allSelected: allS})
   }
+
+  checboxClickHandler(item, index){
+    let copy = this.state.todos     //copy the todo item list from app.state.todos
+    copy[index].completed = !item.completed     //invert completed
+    this.setState( {todos: copy })             //inject copy back into state
+  }
+  deleteHandler(id){
+    console.log(url_todos + id);
+    fetch(url_todos + id, {
+      method: 'DELETE',
+      headers,
+    })
+      .then(
+        let copy = this.state.todos
+        const filteredList = copy.filter(
+          (target) => target.id != id
+        )
+        this.setState({todos: filteredList})
+      )
+  }
+
   // event is auto passed to function on event
   inputChangeHandler = (event) => {
     this.setState( {newItem: event.target.value} )
@@ -50,26 +81,27 @@ class TodoApp extends React.Component {
       return
     }
     event.preventDefault()
-    const {todos, newItem} = this.state
+    const {newItem} = this.state
     const val = newItem.trim() //Rids of white space at beginning and end
-    if(val){
-      let copy = todos
-      let newEntry = {
-        title: val,
-        completed: false
-      }
-      copy.push(newEntry)
-      this.setState({todos: copy, newItem: ''})
+    const newEntry = {
+      "title": val,
+      "completed": false
     }
-  }
+    if (val) {
+      fetch(url_todos, {
+        method: 'POST',
+        headers, //Using our header variable
+        body: JSON.stringify(newEntry)
+      })
+        .then((data) => data.json())
+        .then((data) => {
+          console.log(data)
+          let copy = this.state.todos
+          copy.push(newEntry)
+          this.setState({todos: copy, newItem: '' })
 
-  deleteHandler = (i) => {
-    let copy = this.state.todos
-    //Filters out the element in index matching item of interest
-    const filteredCopy = copy.filter(
-      (target, index) => index !== i
-    )
-    this.setState({todos: filteredCopy})
+        })
+    }
   }
 
   render(){
@@ -119,19 +151,18 @@ class TodoApp extends React.Component {
 
   }
 }
+
 function renderTodoList(app){
   //Get todo list from app state
-  const list = app.state.todos
   return(
-    list.map((item, i) => (
+    app.state.todos.map((item, i) => (
       //Uses defined ListItem const, {item} > prop.children arg
       <ListItem
         key={i}
         item={item}
-        handleToggle={() => app.checboxClickHandler(item, i)}
-        hendleDelete={() => app.deleteHandler(i)}
+        handleToggle={() => app.checboxClicHandler(item, i)}
+        handleDelete= {() => app.deleteHandler(item.id)}
       />
-
     ))
   )
 }

@@ -9,19 +9,20 @@ export const ListItem = (props) => {
     >
       <Table.Cell>
         <Checkbox
-          checked= {item.completed}
+          checked = {item.completed}
           onChange = {handleToggle}
         />
       </Table.Cell>
       <Table.Cell>
         {item.title}
         <Button
+          onClick = {handleDelete}
           color="red"
           icon="trash"
           floated="right"
           compact
           size="small"
-          onClick={handleDelete}
+
         />
       </Table.Cell>
     </Table.Row>
