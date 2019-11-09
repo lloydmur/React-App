@@ -25,7 +25,7 @@ class TodoApp extends React.Component {
   }
   //Lifecycle method Runs when this component mounts the DOM
   componentDidMount(){
-    this.fetchTodos
+    this.fetchTodos()
   }
 
   fetchTodos = () => {
