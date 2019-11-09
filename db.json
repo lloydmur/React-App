@@ -3,17 +3,17 @@
     {
       "id": 0,
       "title": "Pet Kitties",
-      "completed": true
+      "completed": false
     },
     {
       "id": 1,
       "title": "Count Fiddies",
-      "completed": true
+      "completed": false
     },
     {
       "id": 2,
       "title": "Suck Tiddies",
-      "completed": true
+      "completed": false
     }
   ]
 }
