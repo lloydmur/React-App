@@ -30,42 +30,33 @@ class TodoApp extends React.Component {
 
   fetchTodos = () => {
     fetch(url_todos)
-      .then(function(response){
-        console.log('Converting Data...')
-        return response.json()
-      }) //Convert data/response to JSON format
-      .then((data) =>{
-        console.log('Fetching...')
-        this.setState({todos: data})
-      })
+      .then((response) => response.json()) //Convert data/response to JSON format
+      .then((data) =>this.setState({todos: data}))
       .catch((err) => console.error({err}))
   }
 
   toggleAllHandler(allS){
     const list  = this.state.todos
-    Promise.all(
-      list.map((item, i) => (
-        fetch(url_todos + item.id, {
-          method: 'PATCH',
-          headers,
-          body: JSON.stringify({completed: !allS})
-        }).then(console.log(item))
-      ))
-    ).then(this.fetchTodos)
+    list.forEach((item, index) => {
+      item.completed = !allS
+    })
+    this.setState({todos: list})
   }
 
-  checboxClickHandler(item){
-    /*
+  checboxClickHandler(item, index){
+
     let copy = this.state.todos     //copy the todo item list from app.state.todos
     copy[index].completed = !item.completed     //invert completed
     this.setState( {todos: copy })             //inject copy back into state
-    */
+
+    /*
     const {id, completed} = item
     fetch(url_todos + id, {
       method: 'PATCH',
       headers,
       body: JSON.stringify({completed: !completed})
     }).then(this.fetchTodos)
+    */
   }
 
   deleteHandler = (id) => {
@@ -194,7 +185,7 @@ function renderTodoList(app){
       <ListItem
         key={i}
         item={item}
-        handleToggle={() => app.checboxClickHandler(item)}
+        handleToggle={() => app.checboxClickHandler(item, i)}
         handleDelete= {() => app.deleteHandler(item.id)}
       />
     ))
