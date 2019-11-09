@@ -108,7 +108,10 @@ class TodoApp extends React.Component {
         method: 'POST',
         headers, //Using our header variable
         body: JSON.stringify(newEntry)
-      }).then(this.fetchTodos)
+      }).then(() => {
+        this.fetchTodos()
+        this.setState({newItem: ''})
+      })
     }
   }
 
