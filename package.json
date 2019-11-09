@@ -3,6 +3,7 @@
   "homepage": "http://lloydmur.github.io",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:4500",
   "dependencies": {
     "gh-pages": "^2.1.1",
     "json-server": "^0.12.1",
@@ -23,6 +24,10 @@
     "server": "json-server --watch db.json --port 4500",
     "eject": "react-scripts eject",
     "prod": "node server.js"
+  },
+  "engines": {
+    "node": "12.13.0",
+    "npm": "6.13.0"
   },
   "eslintConfig": {
     "extends": "react-app"

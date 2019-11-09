@@ -12,7 +12,7 @@ const todos = [
   { title: 'Eat Corn', completed: false}
 ]
 */
-const url_todos = 'http://localhost:4500/todos/'
+const url_todos = '/todos/'
 const headers = {'content-type': 'application/json'}
 
 class TodoApp extends React.Component {
