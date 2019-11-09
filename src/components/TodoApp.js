@@ -25,7 +25,7 @@ class TodoApp extends React.Component {
   }
   //Lifecycle method Runs when this component mounts the DOM
   componentDidMount(){
-    this.fetchTodos()
+    this.fetchTodos
   }
 
   fetchTodos = () => {
@@ -108,15 +108,7 @@ class TodoApp extends React.Component {
         method: 'POST',
         headers, //Using our header variable
         body: JSON.stringify(newEntry)
-      })
-        .then((data) => data.json())
-        .then((data) => {
-          console.log(data)
-          let copy = this.state.todos
-          copy.push(newEntry)
-          this.setState({todos: copy, newItem: '' })
-
-        })
+      }).then(this.fetchTodos)
     }
   }
 
